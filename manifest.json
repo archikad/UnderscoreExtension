@@ -1,15 +1,12 @@
 {
-    "name": "Getting Started Example",
+    "name": "Underscore",
     "version": "1.0",
-    "description": "Build an Extension!",
+    "description": "Underscore the Internet!",
     "permissions": [
-        "storage"
+        "activeTab"
     ],
-    "background": {
-        "scripts": [
-            "background.js"
-        ],
-        "persistent": false
-    },
-    "manifest_version": 2
+    "manifest_version": 2,
+    "browser_action": {
+        "default_popup": "popup.html"
+    }
 }
