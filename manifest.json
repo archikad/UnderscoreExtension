@@ -3,7 +3,8 @@
     "version": "1.0",
     "description": "Underscore the Internet!",
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "tabs"
     ],
     "manifest_version": 2,
     "browser_action": {
