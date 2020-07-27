@@ -1,0 +1,14 @@
+body{
+    min-height: 600px;
+    min-width:400px;
+    overflow:scroll;
+
+}
+h3{
+ border: blueviolet 2px solid;
+ padding: 3px;
+}
+button{
+    cursor: pointer;
+    background-color: pink;
+}
