@@ -63,20 +63,17 @@ function getSaved(){
                     let h4=document.createElement('h4');
                     let deleteButton=document.createElement('button');
                     let postButton=document.createElement('button');
-                    let el = document.createElement('textarea');
                     deleteButton.innerHTML="Remove";
                     postButton.innerHTML="Post";
                         deleteButton.addEventListener('click',()=>{
                             chrome.storage.sync.remove(key,()=>{
-                                footer.innerHTML="Deleted";
+                                h4.remove();
+                                h3.remove();
                             })
+                            
                         })
                         postButton.addEventListener('click',()=>{
-                            el.value = str;
-                            document.body.appendChild(el);
-                            el.select();
-                            document.execCommand('copy');
-                            document.body.removeChild(el);
+                            // insert code
                         })
                         for(let item of itemsArray){
                             h4.innerHTML+=item.toString()+"\n";
