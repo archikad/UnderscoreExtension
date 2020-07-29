@@ -15,6 +15,6 @@
     "browser_action":{
         "default_icon":"news.png",
         "default_popup":"popup.html",
-        "default_title":"a pop up will come"
+        "default_title":"Underscore_ Extension"
     }
 }

@@ -11,10 +11,17 @@ let mains=document.getElementsByTagName('main');
 let main=mains[0];
 let p=ps[0];
 p.innerHTML=word;
-let saveButton=document.getElementById('saveSnippet');
-saveButton.addEventListener('click',save);
+let openFeedButton=document.getElementById('openFeed');
+openFeedButton.addEventListener('click', openFeed);
 main.innerHTML="";
+let userid='5f1faf7f2002dc0017aa23d4';
+let submitIDbutton=document.getElementById('idButton');
 
+save();
+
+function openFeed(){
+    window.open("https://underscore-web.herokuapp.com/posts#");
+}
 // function to save highlighted snippet
 function save(){
    
@@ -32,14 +39,15 @@ function save(){
             }
         }
         if(found==0){
-        chrome.storage.sync.set({[url]: [word]}, function() {
+        chrome.storage.sync.set({[word]: [url]}, function() {
        
       });
         }
+        p.innerHTML="";
+        getSaved();
   
     });
     footer.innerHtml="saved";
-    getSaved();
 }
 
 // function to retrieve the selected saved snippets
@@ -74,11 +82,36 @@ function getSaved(){
                         })
                         postButton.addEventListener('click',()=>{
                             // insert code
+                            fetch('https://underscore-web.herokuapp.com/posts/remote/new', {
+	                            method: 'POST',
+	                            body: JSON.stringify({
+		                            "link": url,
+		                            "snippet": word,
+		                            "userid": userid
+	                            }),
+	                            headers: {
+	                            	'Content-type': 'application/json; charset=UTF-8'
+	                            }
+                            }).then(function (response) {
+                            	if (response.ok) {
+                            		return response.json();
+                            	}
+                        	return Promise.reject(response);
+                            }).then(function (data) {
+                            	console.log(data);
+                            }).catch(function (error) {
+                            	console.warn('Something went wrong.', error);
+                            });
+                            chrome.storage.sync.remove(key,()=>{
+                                h4.remove();
+                                h3.remove();
+                            })                            
+                            
                         })
                         for(let item of itemsArray){
+                            h4.innerHTML+=key+"\n\n";
                             h4.innerHTML+=item.toString()+"\n";
                         }
-                    h4.innerHTML+=key+"\n\n";
                     h3.appendChild(h4);
                     h3.appendChild(deleteButton);
                     h3.appendChild(postButton);
