@@ -18,7 +18,7 @@ save();
 main.innerHTML="";
 
 //hard-set userid TODO figure out how to pass field to variable
-let userid ="5f1faf7f2002dc0017aa23d4";
+//let userid ="5f1faf7f2002dc0017aa23d4";
 
 // create/style openFeed button
 
@@ -44,20 +44,15 @@ submitIDbutton.classList.add("waves-effect");
 submitIDbutton.classList.add("waves-light");
 submitIDbutton.classList.add("btn");
 
-// function submitID(){
-//     // userid = $('#userid').val();
-//     userid = document.getElementById('useridinput').value;
-    //userid="5f1faf7f2002dc0017aa23d4";
-//     chrome.extension.getBackgroundPage().console.log(userid);
-//     submitIDbutton.classList.add("invisible");
-// }
+var userid;
 
-/*submitIDbutton.addEventListener('click',()=>{
-    // insert code
-    userid = document.getElementById('submitID').elements["useridinput"].value;
+submitIDbutton.onclick = function submitID(e) {
+    e.preventDefault();
+    userid = document.getElementById('useridinput').value;
     console.log(userid);
-    chrome.getBackgroundPage().console.log('Done');
-})*/
+
+    return false;
+}
 
 //opens feed function for feed button
 
