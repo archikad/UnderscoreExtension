@@ -12,12 +12,15 @@ let main=mains[0];
 let p=ps[0];
 p.innerHTML=word;
 
+// save and create a snippet of whatever was just highlighted
 save();
 
 main.innerHTML="";
+
+//hard-set userid TODO figure out how to pass field to variable
 let userid ="5f1faf7f2002dc0017aa23d4";
 
-//openFeed button
+// create/style openFeed button
 
 let openFeedButton=document.getElementById('openFeed');
 openFeedButton.addEventListener('click', openFeed);
@@ -25,7 +28,7 @@ openFeedButton.classList.add("waves-effect");
 openFeedButton.classList.add("waves-light");
 openFeedButton.classList.add("btn");
 
-//searchLink button
+// create/style searchLink button
 
 let searchLinkButton=document.getElementById('searchLink');
 searchLinkButton.addEventListener('click', searchLink);
@@ -33,7 +36,7 @@ searchLinkButton.classList.add("waves-effect");
 searchLinkButton.classList.add("waves-light");
 searchLinkButton.classList.add("btn");
 
-//sumbitID button
+//create/style sumbitID button
 
 let submitIDbutton=document.getElementById('idButton');
 //submitIDbutton.addEventListener('click', submitID);
@@ -44,38 +47,46 @@ submitIDbutton.classList.add("btn");
 // function submitID(){
 //     // userid = $('#userid').val();
 //     userid = document.getElementById('useridinput').value;
-    userid="5f1faf7f2002dc0017aa23d4";
+    //userid="5f1faf7f2002dc0017aa23d4";
 //     chrome.extension.getBackgroundPage().console.log(userid);
 //     submitIDbutton.classList.add("invisible");
 // }
-submitBotton.addEventListener('click',()=>{
+
+/*submitIDbutton.addEventListener('click',()=>{
     // insert code
-    userid = document.getElementById('submitID').elements["useridinput"];
+    userid = document.getElementById('submitID').elements["useridinput"].value;
     console.log(userid);
     chrome.getBackgroundPage().console.log('Done');
-})
+})*/
+
+//opens feed function for feed button
 
 function openFeed(){
     window.open("https://underscore-web.herokuapp.com/posts#");
 }
+
+//searches the link for the most recent article you snipped from (NOT CURRENT PAGE, maybe fix?)
 
 function searchLink(){
     let linkToSearch = "https://underscore-web.herokuapp.com/posts/search?search="+url;
     window.open(linkToSearch);
 
 }
-// function to save highlighted snippet
+
+// function to save highlighted snippet and show it, calls getSaved() within
 function save(){
    
+
     chrome.storage.sync.get(null, function(items) {
         var allKeys = Object.keys(items);
         let found=0;
+        //
         for(let key of allKeys){
-            if(key==url){
+            if(key==word){
                 found=1;
                 chrome.storage.sync.get(key, function(item) {
                  
-                    item[key].push(word);
+                    item[key].push(url);
                   });
 
             }
@@ -93,7 +104,7 @@ function save(){
 }
 
 
-// function to retrieve the selected saved snippets
+// function to retrieve and create the cards for the selected saved snippets
 function getSaved(){
 
     
@@ -113,26 +124,24 @@ function getSaved(){
                         let card=document.createElement('div');
                         card.classList.add("card");
 
+                        //snippet on card
                         let cardText=document.createElement('h6');
                         cardText.classList.add("card-text");
                         
+                        //actual card
                         let cardContent =document.createElement('div');
                         cardContent.classList.add('card-content');
 
+                        //url on card
                         let cardUrl = document.createElement('p');
                         cardUrl.classList.add("card-action");
                         cardUrl.classList.add("card-text");
                         cardUrl.classList.add("link-bg-color");
-                        //cardUrl.classList.add("right-align");
-
-                        /*let cardClose = document.createElement('p');
-                        cardClose.classList.add("card-action");
-                        cardClose.classList.add("card-text");
-                        cardClose.classList.add("right-align");*/
 
                         let cardActions=document.createElement('div');
                         cardActions.classList.add('card-action');
 
+                        //create delete button in card
                         let deleteButton=document.createElement('button');
                         deleteButton.classList.add("waves-effect");
                         deleteButton.classList.add("waves-light");
@@ -140,6 +149,7 @@ function getSaved(){
                         deleteButton.style.backgroundColor="#ff726f";
                         deleteButton.style.marginLeft="20px";
 
+                        //create post button in card
                         let postButton=document.createElement('button');
                         postButton.classList.add("waves-effect");
                         postButton.classList.add("waves-light");
@@ -148,6 +158,8 @@ function getSaved(){
 
                         deleteButton.innerHTML="&times;";
                         postButton.innerHTML="Post";
+
+                        // delete card when post button is clicked
                         deleteButton.addEventListener('click',()=>{
                             chrome.storage.sync.remove(key,()=>{
                                 card.remove();
@@ -155,6 +167,8 @@ function getSaved(){
                             })
                             
                         })
+
+                        // post card when post button is clicked
                         postButton.addEventListener('click',()=>{
                             // insert code
                             fetch('https://underscore-web.herokuapp.com/posts/remote/new', {
@@ -170,13 +184,16 @@ function getSaved(){
                             }).then(function (response) {
                             	if (response.ok) {
                             		return response.json();
-                            	}
+                                }
+                                
                         	return Promise.reject(response);
                             }).then(function (data) {
-                            	console.log(data);
+                                console.log(data);
                             }).catch(function (error) {
                             	console.warn('Something went wrong.', error);
                             });
+
+                            //remove card after posted
                             chrome.storage.sync.remove(key,()=>{
                                 cardText.remove();
                                 cardUrl.remove();
@@ -184,10 +201,12 @@ function getSaved(){
                             })                            
                             
                         })
+                        //add to the card, for each item snippet
                         for(let item of itemsArray){
                             cardText.innerHTML+=key+"\n";
                             cardUrl.innerHTML+=item.toString()+"\n";
                         }
+                    // append elements to card, appen card to the main
                     cardContent.appendChild(cardUrl);
                     cardContent.appendChild(cardText);
                     cardActions.appendChild(postButton);
