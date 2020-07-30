@@ -51,6 +51,10 @@ submitIDbutton.onclick = function submitID(e) {
     userid = document.getElementById('useridinput').value;
     console.log(userid);
 
+    let currentid=document.createElement('p');
+    currentid.innerHTML="Posting as " + userid;
+    main.appendChild(currentid);
+
     return false;
 }
 
