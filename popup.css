@@ -2,6 +2,7 @@ body{
     min-height: 600px;
     min-width:400px;
     overflow:scroll;
+    background-color: ghostwhite;
 
 }
 
@@ -11,6 +12,7 @@ body{
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     padding: 2px 16px;
+    padding-bottom: 70px;
 }
 button{
     cursor: pointer;
@@ -18,9 +20,7 @@ button{
 }
 
 .x-button {
-     position:absolute;
-     bottom:0;
-     left:0;
+    background-color: red;
  }
 
  .link-bg-color {
@@ -41,5 +41,9 @@ button{
 
 #submitID {
     display: inline;
+}
+
+.invisible{
+    visibility: hidden;
 }
 

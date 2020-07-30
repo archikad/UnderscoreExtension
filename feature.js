@@ -12,29 +12,52 @@ let main=mains[0];
 let p=ps[0];
 p.innerHTML=word;
 
+
+save();
+
+main.innerHTML="";
+let userid ="5f1faf7f2002dc0017aa23d4";
+
+//openFeed button
+
 let openFeedButton=document.getElementById('openFeed');
 openFeedButton.addEventListener('click', openFeed);
 openFeedButton.classList.add("waves-effect");
 openFeedButton.classList.add("waves-light");
 openFeedButton.classList.add("btn");
 
-main.innerHTML="";
-let userid='5f1faf7f2002dc0017aa23d4';
+//searchLink button
 
-save();
+let searchLinkButton=document.getElementById('searchLink');
+searchLinkButton.addEventListener('click', searchLink);
+searchLinkButton.classList.add("waves-effect");
+searchLinkButton.classList.add("waves-light");
+searchLinkButton.classList.add("btn");
+
+//sumbitID button
 
 let submitIDbutton=document.getElementById('idButton');
-submitIDbutton.addEventListener('click', SubmitID);
+//submitIDbutton.addEventListener('click', submitID);
 submitIDbutton.classList.add("waves-effect");
 submitIDbutton.classList.add("waves-light");
 submitIDbutton.classList.add("btn");
 
-function SubmitID(){
-    submitIDbutton.style.display = "none";
+function submitID(){
+    //userid = $('#userid').val();
+    //userid = document.getElementById('useridinput').value;
+    //userid="5f1faf7f2002dc0017aa23d4";
+    //console.log(userid);
+    //submitIDbutton.classList.add("invisible");
 }
 
 function openFeed(){
     window.open("https://underscore-web.herokuapp.com/posts#");
+}
+
+function searchLink(){
+    let linkToSearch = "https://underscore-web.herokuapp.com/posts/search?search="+url;
+    window.open(linkToSearch);
+
 }
 // function to save highlighted snippet
 function save(){
@@ -64,6 +87,7 @@ function save(){
     footer.innerHtml="saved";
 }
 
+
 // function to retrieve the selected saved snippets
 function getSaved(){
 
@@ -91,17 +115,24 @@ function getSaved(){
                         cardUrl.classList.add("card-action");
                         cardUrl.classList.add("card-text");
                         cardUrl.classList.add("link-bg-color");
+                        //cardUrl.classList.add("right-align");
+
+                        /*let cardClose = document.createElement('p');
+                        cardClose.classList.add("card-action");
+                        cardClose.classList.add("card-text");
+                        cardClose.classList.add("right-align");*/
+
 
                         let deleteButton=document.createElement('button');
                         deleteButton.classList.add("waves-effect");
                         deleteButton.classList.add("waves-light");
-                        deleteButton.classList.add("btn");
-                        deleteButton.classList.add("x-button");
+                        deleteButton.classList.add("btn-small");
+                        deleteButton.style.backgroundColor="#ff726f";
 
                         let postButton=document.createElement('button');
                         postButton.classList.add("waves-effect");
                         postButton.classList.add("waves-light");
-                        postButton.classList.add("btn");
+                        postButton.classList.add("btn-small");
 
                         deleteButton.innerHTML="x";
                         postButton.innerHTML="Post";
@@ -119,7 +150,7 @@ function getSaved(){
 	                            body: JSON.stringify({
 		                            "link": url,
 		                            "snippet": word,
-		                            "userid": '5f1faf7f2002dc0017aa23d4'
+		                            "userid": userid
 	                            }),
 	                            headers: {
 	                            	'Content-type': 'application/json; charset=UTF-8'
