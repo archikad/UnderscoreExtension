@@ -51,6 +51,9 @@ submitIDbutton.onclick = function submitID(e) {
     userid = document.getElementById('useridinput').value;
     console.log(userid);
 
+    chrome.storage.sync.set({'currentid': userid}, function() {
+    });
+
     let currentid=document.createElement('p');
     currentid.innerHTML="Posting as " + userid;
     main.appendChild(currentid);
@@ -67,7 +70,7 @@ function openFeed(){
 //searches the link for the most recent article you snipped from (NOT CURRENT PAGE, maybe fix?)
 
 function searchLink(){
-    let linkToSearch = "https://underscore-web.herokuapp.com/posts/search?search="+url;
+    let linkToSearch = "https://underscore-web.herokuapp.com/posts/search?search="+url+"&domainOnly=true";
     window.open(linkToSearch);
 
 }
@@ -117,103 +120,105 @@ function getSaved(){
         }
         // creates and shows an array of snippets
         for(let key of allKeys){
-     
-                    chrome.storage.sync.get(key, function(items) {
-                        let itemsArray=items[key];
-                        let card=document.createElement('div');
-                        card.classList.add("card");
+            if(key !== 'currentid'){
+                chrome.storage.sync.get(key, function(items) {
+                    let itemsArray=items[key];
+                    let card=document.createElement('div');
+                    card.classList.add("card");
 
-                        //snippet on card
-                        let cardText=document.createElement('h6');
-                        cardText.classList.add("card-text");
+                    //snippet on card
+                    let cardText=document.createElement('h6');
+                    cardText.classList.add("card-text");
+                    
+                    //actual card
+                    let cardContent =document.createElement('div');
+                    cardContent.classList.add('card-content');
+
+                    //url on card
+                    let cardUrl = document.createElement('p');
+                    cardUrl.classList.add("card-action");
+                    cardUrl.classList.add("card-text");
+                    cardUrl.classList.add("link-bg-color");
+
+                    let cardActions=document.createElement('div');
+                    cardActions.classList.add('card-action');
+
+                    //create delete button in card
+                    let deleteButton=document.createElement('button');
+                    deleteButton.classList.add("waves-effect");
+                    deleteButton.classList.add("waves-light");
+                    deleteButton.classList.add("btn-small");
+                    deleteButton.style.backgroundColor="#ff726f";
+                    deleteButton.style.marginLeft="20px";
+
+                    //create post button in card
+                    let postButton=document.createElement('button');
+                    postButton.classList.add("waves-effect");
+                    postButton.classList.add("waves-light");
+                    postButton.classList.add("btn-small");
+                    deleteButton.classList.add("btn-floating");
+
+                    deleteButton.innerHTML="&times;";
+                    postButton.innerHTML="Post";
+
+                    // delete card when post button is clicked
+                    deleteButton.addEventListener('click',()=>{
+                        chrome.storage.sync.remove(key,()=>{
+                            card.remove();
+                            cardText.remove();
+                        })
                         
-                        //actual card
-                        let cardContent =document.createElement('div');
-                        cardContent.classList.add('card-content');
+                    })
 
-                        //url on card
-                        let cardUrl = document.createElement('p');
-                        cardUrl.classList.add("card-action");
-                        cardUrl.classList.add("card-text");
-                        cardUrl.classList.add("link-bg-color");
-
-                        let cardActions=document.createElement('div');
-                        cardActions.classList.add('card-action');
-
-                        //create delete button in card
-                        let deleteButton=document.createElement('button');
-                        deleteButton.classList.add("waves-effect");
-                        deleteButton.classList.add("waves-light");
-                        deleteButton.classList.add("btn-small");
-                        deleteButton.style.backgroundColor="#ff726f";
-                        deleteButton.style.marginLeft="20px";
-
-                        //create post button in card
-                        let postButton=document.createElement('button');
-                        postButton.classList.add("waves-effect");
-                        postButton.classList.add("waves-light");
-                        postButton.classList.add("btn-small");
-                        deleteButton.classList.add("btn-floating");
-
-                        deleteButton.innerHTML="&times;";
-                        postButton.innerHTML="Post";
-
-                        // delete card when post button is clicked
-                        deleteButton.addEventListener('click',()=>{
-                            chrome.storage.sync.remove(key,()=>{
-                                card.remove();
-                                cardText.remove();
-                            })
+                    // post card when post button is clicked
+                    postButton.addEventListener('click',()=>{
+                        // insert code
+                        fetch('https://underscore-web.herokuapp.com/posts/remote/new', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                "link": url,
+                                "snippet": word,
+                                "userid": userid
+                            }),
+                            headers: {
+                                'Content-type': 'application/json; charset=UTF-8'
+                            }
+                        }).then(function (response) {
+                            if (response.ok) {
+                                return response.json();
+                            }
                             
-                        })
+                        return Promise.reject(response);
+                        }).then(function (data) {
+                            console.log(data);
+                        }).catch(function (error) {
+                            console.warn('Something went wrong.', error);
+                        });
 
-                        // post card when post button is clicked
-                        postButton.addEventListener('click',()=>{
-                            // insert code
-                            fetch('https://underscore-web.herokuapp.com/posts/remote/new', {
-	                            method: 'POST',
-	                            body: JSON.stringify({
-		                            "link": url,
-		                            "snippet": word,
-		                            "userid": userid
-	                            }),
-	                            headers: {
-	                            	'Content-type': 'application/json; charset=UTF-8'
-	                            }
-                            }).then(function (response) {
-                            	if (response.ok) {
-                            		return response.json();
-                                }
-                                
-                        	return Promise.reject(response);
-                            }).then(function (data) {
-                                console.log(data);
-                            }).catch(function (error) {
-                            	console.warn('Something went wrong.', error);
-                            });
+                        //remove card after posted
+                        chrome.storage.sync.remove(key,()=>{
+                            cardText.remove();
+                            cardUrl.remove();
+                            card.remove();
+                        })                            
+                        
+                    })
+                    //add to the card, for each item snippet
+                    for(let item of itemsArray){
+                        cardText.innerHTML+=key+"\n";
+                        cardUrl.innerHTML+=item.toString()+"\n";
+                    }
+                // append elements to card, appen card to the main
+                cardContent.appendChild(cardUrl);
+                cardContent.appendChild(cardText);
+                cardActions.appendChild(postButton);
+                cardActions.appendChild(deleteButton);
+                card.appendChild(cardContent);
+                card.appendChild(cardActions);
+                main.appendChild(card);
+              });
 
-                            //remove card after posted
-                            chrome.storage.sync.remove(key,()=>{
-                                cardText.remove();
-                                cardUrl.remove();
-                                card.remove();
-                            })                            
-                            
-                        })
-                        //add to the card, for each item snippet
-                        for(let item of itemsArray){
-                            cardText.innerHTML+=key+"\n";
-                            cardUrl.innerHTML+=item.toString()+"\n";
-                        }
-                    // append elements to card, appen card to the main
-                    cardContent.appendChild(cardUrl);
-                    cardContent.appendChild(cardText);
-                    cardActions.appendChild(postButton);
-                    cardActions.appendChild(deleteButton);
-                    card.appendChild(cardContent);
-                    card.appendChild(cardActions);
-                    main.appendChild(card);
-                  });
+            }
 
             
         }
