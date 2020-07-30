@@ -5,18 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Underscore</title>
     <link rel="stylesheet" type="text/css" href="popup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
    <style>
    </style>
 </head>
 <body >
-  <h1>Underscore</h1>
-  <form>
-    <div class="form-group">
-      <label for="userid">User ID</label>
-      <input type="text" class="form-control" id="userid" placeholder="Enter user ID">
+  <div class="link-bg-color">
+      <img src="logo.png">
     </div>
-    <button type="submit" id="idButton">Submit</button>
+  <form>
+    <div id="submitID" class="form-group">
+      <input type="text" class="form-control" id="userid" placeholder="Enter user ID">
+      <button type="submit" id="idButton" style="font-size : 10px;">Submit</button>
+    </div>
   </form>
+  <section>
+    <button id="openFeed">Open your Feed</button>
+</section>
  <section>
     <p>
 
@@ -27,12 +32,11 @@
  </section>
 <section>
     <main>
-
     </main>
 </section>
-<section>
-    <button id="openFeed">Open your Feed</button>
-</section>
+<div id="footer" class="link-bg-color">
+    <h6 style="color:white">Visit our website <a style="color:white" href="https://underscore-web.herokuapp.com/" target="_blank">here!</a></h6>
+</div>
 <script src="./feature.js"></script>
 </body>
 </html>

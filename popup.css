@@ -4,11 +4,42 @@ body{
     overflow:scroll;
 
 }
-h3{
- border: blueviolet 2px solid;
- padding: 3px;
+
+.card-text {
+    word-wrap: break-word;
+}
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    padding: 2px 16px;
 }
 button{
     cursor: pointer;
     background-color: pink;
 }
+
+.x-button {
+     position:absolute;
+     bottom:0;
+     left:0;
+ }
+
+ .link-bg-color {
+    background-color: #26a69a;
+ }
+
+ img{
+    max-width: 60px;
+    max-height: 60px;
+    display: block; 
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#submitID {
+    display: inline;
+}
+

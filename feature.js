@@ -11,13 +11,27 @@ let mains=document.getElementsByTagName('main');
 let main=mains[0];
 let p=ps[0];
 p.innerHTML=word;
+
 let openFeedButton=document.getElementById('openFeed');
 openFeedButton.addEventListener('click', openFeed);
+openFeedButton.classList.add("waves-effect");
+openFeedButton.classList.add("waves-light");
+openFeedButton.classList.add("btn");
+
 main.innerHTML="";
 let userid='5f1faf7f2002dc0017aa23d4';
-let submitIDbutton=document.getElementById('idButton');
 
 save();
+
+let submitIDbutton=document.getElementById('idButton');
+submitIDbutton.addEventListener('click', SubmitID);
+submitIDbutton.classList.add("waves-effect");
+submitIDbutton.classList.add("waves-light");
+submitIDbutton.classList.add("btn");
+
+function SubmitID(){
+    submitIDbutton.style.display = "none";
+}
 
 function openFeed(){
     window.open("https://underscore-web.herokuapp.com/posts#");
@@ -67,16 +81,34 @@ function getSaved(){
      
                     chrome.storage.sync.get(key, function(items) {
                         let itemsArray=items[key];
-                    let h3=document.createElement('h3');
-                    let h4=document.createElement('h4');
-                    let deleteButton=document.createElement('button');
-                    let postButton=document.createElement('button');
-                    deleteButton.innerHTML="Remove";
-                    postButton.innerHTML="Post";
+                        let card=document.createElement('div');
+                        card.classList.add("card");
+
+                        let cardText=document.createElement('h6');
+                        cardText.classList.add("card-text");
+                        
+                        let cardUrl = document.createElement('p');
+                        cardUrl.classList.add("card-action");
+                        cardUrl.classList.add("card-text");
+                        cardUrl.classList.add("link-bg-color");
+
+                        let deleteButton=document.createElement('button');
+                        deleteButton.classList.add("waves-effect");
+                        deleteButton.classList.add("waves-light");
+                        deleteButton.classList.add("btn");
+                        deleteButton.classList.add("x-button");
+
+                        let postButton=document.createElement('button');
+                        postButton.classList.add("waves-effect");
+                        postButton.classList.add("waves-light");
+                        postButton.classList.add("btn");
+
+                        deleteButton.innerHTML="x";
+                        postButton.innerHTML="Post";
                         deleteButton.addEventListener('click',()=>{
                             chrome.storage.sync.remove(key,()=>{
-                                h4.remove();
-                                h3.remove();
+                                card.remove();
+                                cardText.remove();
                             })
                             
                         })
@@ -87,7 +119,7 @@ function getSaved(){
 	                            body: JSON.stringify({
 		                            "link": url,
 		                            "snippet": word,
-		                            "userid": userid
+		                            "userid": '5f1faf7f2002dc0017aa23d4'
 	                            }),
 	                            headers: {
 	                            	'Content-type': 'application/json; charset=UTF-8'
@@ -103,19 +135,21 @@ function getSaved(){
                             	console.warn('Something went wrong.', error);
                             });
                             chrome.storage.sync.remove(key,()=>{
-                                h4.remove();
-                                h3.remove();
+                                cardText.remove();
+                                cardUrl.remove();
+                                card.remove();
                             })                            
                             
                         })
                         for(let item of itemsArray){
-                            h4.innerHTML+=key+"\n\n";
-                            h4.innerHTML+=item.toString()+"\n";
+                            cardText.innerHTML+=key+"\n";
+                            cardUrl.innerHTML+=item.toString()+"\n";
                         }
-                    h3.appendChild(h4);
-                    h3.appendChild(deleteButton);
-                    h3.appendChild(postButton);
-                    main.appendChild(h3);
+                    card.appendChild(cardUrl);
+                    card.appendChild(cardText);
+                    card.appendChild(postButton);
+                    card.appendChild(deleteButton);
+                    main.appendChild(card);
                   });
 
             
