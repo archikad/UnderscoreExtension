@@ -12,7 +12,6 @@ let main=mains[0];
 let p=ps[0];
 p.innerHTML=word;
 
-
 save();
 
 main.innerHTML="";
@@ -42,13 +41,19 @@ submitIDbutton.classList.add("waves-effect");
 submitIDbutton.classList.add("waves-light");
 submitIDbutton.classList.add("btn");
 
-function submitID(){
-    //userid = $('#userid').val();
-    //userid = document.getElementById('useridinput').value;
-    //userid="5f1faf7f2002dc0017aa23d4";
-    //console.log(userid);
-    //submitIDbutton.classList.add("invisible");
-}
+// function submitID(){
+//     // userid = $('#userid').val();
+//     userid = document.getElementById('useridinput').value;
+    userid="5f1faf7f2002dc0017aa23d4";
+//     chrome.extension.getBackgroundPage().console.log(userid);
+//     submitIDbutton.classList.add("invisible");
+// }
+submitBotton.addEventListener('click',()=>{
+    // insert code
+    userid = document.getElementById('submitID').elements["useridinput"];
+    console.log(userid);
+    chrome.getBackgroundPage().console.log('Done');
+})
 
 function openFeed(){
     window.open("https://underscore-web.herokuapp.com/posts#");
@@ -111,6 +116,9 @@ function getSaved(){
                         let cardText=document.createElement('h6');
                         cardText.classList.add("card-text");
                         
+                        let cardContent =document.createElement('div');
+                        cardContent.classList.add('card-content');
+
                         let cardUrl = document.createElement('p');
                         cardUrl.classList.add("card-action");
                         cardUrl.classList.add("card-text");
@@ -122,19 +130,23 @@ function getSaved(){
                         cardClose.classList.add("card-text");
                         cardClose.classList.add("right-align");*/
 
+                        let cardActions=document.createElement('div');
+                        cardActions.classList.add('card-action');
 
                         let deleteButton=document.createElement('button');
                         deleteButton.classList.add("waves-effect");
                         deleteButton.classList.add("waves-light");
                         deleteButton.classList.add("btn-small");
                         deleteButton.style.backgroundColor="#ff726f";
+                        deleteButton.style.marginLeft="20px";
 
                         let postButton=document.createElement('button');
                         postButton.classList.add("waves-effect");
                         postButton.classList.add("waves-light");
                         postButton.classList.add("btn-small");
+                        deleteButton.classList.add("btn-floating");
 
-                        deleteButton.innerHTML="x";
+                        deleteButton.innerHTML="&times;";
                         postButton.innerHTML="Post";
                         deleteButton.addEventListener('click',()=>{
                             chrome.storage.sync.remove(key,()=>{
@@ -176,10 +188,12 @@ function getSaved(){
                             cardText.innerHTML+=key+"\n";
                             cardUrl.innerHTML+=item.toString()+"\n";
                         }
-                    card.appendChild(cardUrl);
-                    card.appendChild(cardText);
-                    card.appendChild(postButton);
-                    card.appendChild(deleteButton);
+                    cardContent.appendChild(cardUrl);
+                    cardContent.appendChild(cardText);
+                    cardActions.appendChild(postButton);
+                    cardActions.appendChild(deleteButton);
+                    card.appendChild(cardContent);
+                    card.appendChild(cardActions);
                     main.appendChild(card);
                   });
 
